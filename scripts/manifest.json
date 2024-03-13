@@ -16,5 +16,14 @@
                 "url": "https://github.com/ninja-build/ninja/releases/download/v1.11.1/ninja-win.zip"
             }
         }
+    },
+    {
+        "name": "cmake-3.29.0.rc3",
+        "path": "modules",
+        "perOSInfo": {
+            "win32": {
+                "url": "https://github.com/Kitware/CMake/releases/download/v3.29.0-rc3/cmake-3.29.0-rc3-windows-x86_64.zip"
+            }
+        }
     }
 ]
