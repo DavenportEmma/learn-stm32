@@ -25,5 +25,17 @@
                 "url": "https://github.com/Kitware/CMake/releases/download/v3.29.0-rc3/cmake-3.29.0-rc3-windows-x86_64.zip"
             }
         }
+    },
+    {
+        "name": "stm32f7xx_hal_driver",
+        "path": "modules/stm32f7xx_hal_driver",
+        "url": "https://github.com/STMicroelectronics/stm32f7xx_hal_driver.git",
+        "ref": "master"
+    },
+    {
+        "name": "cmsis_device_f7",
+        "path": "modules/cmsis_device_f7",
+        "url": "https://github.com/STMicroelectronics/cmsis_device_f7.git",
+        "ref": "master"
     }
 ]
