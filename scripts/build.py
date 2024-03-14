@@ -1,10 +1,28 @@
 import subprocess
 import argparse
 import os
+import pathlib
+import shutil
 
 
 def main(args):
-    sdk_base = os.getcwd()
+    if args.clean:
+        try:
+            shutil.rmtree(args.build_dir)
+        except:
+            pass
+
+    sdk_base = pathlib.Path(os.getcwd()).as_posix()
+
+    if not os.path.exists(os.path.join(args.app_dir, "inc/stm32f7xx_hal_conf.h")):
+        shutil.copy(
+            os.path.join(
+                sdk_base,
+                "modules/stm32f7xx_hal_driver/Inc/stm32f7xx_hal_conf_template.h",
+            ),
+            os.path.join(args.app_dir, "inc/stm32f7xx_hal_conf.h"),
+        )
+
     subprocess.run(
         [
             "cmake",
@@ -17,6 +35,10 @@ def main(args):
         ]
     )
 
+    subprocess.run(
+        ["cmake", "--build", f"{args.build_dir}", "--clean-first", "-j", "8"]
+    )
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -25,6 +47,13 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "-d", "--build-dir", type=str, help="path to the build directory"
+    )
+
+    parser.add_argument(
+        "-c",
+        "--clean",
+        action="store_true",
+        help="delete the build directory before building",
     )
 
     args = parser.parse_args()
