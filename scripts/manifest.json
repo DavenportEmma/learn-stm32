@@ -1,6 +1,6 @@
 [
     {
-        "name": "gnu-arm-embedded",
+        "name": "gcc-arm-none-eabi",
         "path": "modules",
         "perOSInfo": {
             "win32": {
@@ -18,7 +18,7 @@
         }
     },
     {
-        "name": "cmake-3.29.0.rc3",
+        "name": "cmake-3.29.0-rc3",
         "path": "modules",
         "perOSInfo": {
             "win32": {
