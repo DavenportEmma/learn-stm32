@@ -4,6 +4,7 @@
 #include "stm32f722xx.h"
 
 int main() {
+    HAL_Init();
     __HAL_RCC_GPIOB_CLK_ENABLE();
     GPIO_InitTypeDef g;
     g.Mode = GPIO_MODE_OUTPUT_PP;
@@ -14,7 +15,8 @@ int main() {
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, GPIO_PIN_SET);
 
     while(1) {
-
+        HAL_Delay(1000);
+        HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_7);
     }
 
     return 0;
