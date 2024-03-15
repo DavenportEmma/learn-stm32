@@ -15,7 +15,7 @@ SET(CMAKE_CROSSCOMPILING TRUE)
 set(CMAKE_C_COMPILER_WORKS 1)
 set(CMAKE_CXX_COMPILER_WORKS 1)
 set(CMAKE_EXECUTABLE_SUFFIX ".elf")
-
+set(CMAKE_SYSTEM_PROCESSOR arm)
 # variable that is used for the toolchain
 set(gcc_arm_toolchain_base ${SDK_BASE}/modules/gcc-arm-none-eabi-10.3-2021.10)
 
@@ -54,3 +54,11 @@ set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSTM32F722xx")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu11")
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wl,-allow-multiple-definition")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -march=armv7e-m+fp -mfpu=fpv5-sp-d16 -mfloat-abi=hard")
+
+set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -x assembler-with-cpp")
