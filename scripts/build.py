@@ -6,13 +6,35 @@ import shutil
 
 
 def main(args):
+    sdk_base = pathlib.Path(os.getcwd()).as_posix()
+
     if args.clean:
         try:
             shutil.rmtree(args.build_dir)
         except:
             pass
 
-    sdk_base = pathlib.Path(os.getcwd()).as_posix()
+        if not os.path.exists(os.path.join(args.app_dir, "inc/stm32f7xx_hal_conf.h")):
+            shutil.copy(
+                os.path.join(
+                    sdk_base,
+                    "modules/stm32f7xx_hal_driver/Inc/stm32f7xx_hal_conf_template.h",
+                ),
+                os.path.join(args.app_dir, "inc/stm32f7xx_hal_conf.h"),
+            )
+
+
+        subprocess.run(
+            [
+                "cmake",
+                f"-DSDK_BASE={sdk_base}",
+                f"-C {sdk_base}/cmake/preload.cmake",
+                f"-DCMAKE_MODULE_PATH={sdk_base}/cmake",
+                f"-DCMAKE_TOOLCHAIN_FILE={sdk_base}/cmake/toolchain.cmake",
+                f"-S {args.app_dir}",
+                f"-B {args.build_dir}",
+            ]
+        )
 
     if not os.path.exists(os.path.join(args.app_dir, "inc/stm32f7xx_hal_conf.h")):
         shutil.copy(
@@ -22,6 +44,7 @@ def main(args):
             ),
             os.path.join(args.app_dir, "inc/stm32f7xx_hal_conf.h"),
         )
+
 
     subprocess.run(
         [
@@ -36,7 +59,7 @@ def main(args):
     )
 
     subprocess.run(
-        ["cmake", "--build", f"{args.build_dir}", "--clean-first", "-j", "8"]
+        ["cmake", "--build", f"{args.build_dir}", "-j", "8"]
     )
 
 
