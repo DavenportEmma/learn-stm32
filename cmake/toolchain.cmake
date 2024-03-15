@@ -56,7 +56,7 @@ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSTM32F722xx")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu11")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu11 -g3")
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wl,-allow-multiple-definition")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -march=armv7e-m+fp -mfpu=fpv5-sp-d16 -mfloat-abi=hard")
