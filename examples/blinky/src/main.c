@@ -9,7 +9,7 @@ TIM_HandleTypeDef htim;
 int main() {
     HAL_Init();
 
-    htim.Instance = TIM2;
+    htim.Instance = TIM6;
     htim.Channel = HAL_TIM_ACTIVE_CHANNEL_1;
     htim.Init.Prescaler = 999;
     htim.Init.CounterMode = TIM_COUNTERMODE_UP;
