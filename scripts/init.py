@@ -18,8 +18,8 @@ def download(entry):
 
     url = entry["url"] if "url" in entry else entry["perOSInfo"][sys.platform]["url"]
     file_name = os.path.split(url)[1]
-    extension = os.path.splitext(file_name)[1]
     file_name = re.sub(r"\?.*$", "", file_name)
+    extension = os.path.splitext(file_name)[1]
     print("Downloading %s" % file_name)
 
     if extension == ".git":
