@@ -38,7 +38,7 @@ set(CMAKE_C_COMPILER ${gcc_arm_toolchain_bin_path}/${gcc_arm_toolchain_prefix}-g
 set(CMAKE_CXX_COMPILER ${gcc_arm_toolchain_bin_path}/${gcc_arm_toolchain_prefix}-g++${executable_extension})
 set(CMAKE_AR ${gcc_arm_toolchain_bin_path}/${gcc_arm_toolchain_prefix}-ar${executable_extension})
 set(CMAKE_ASM_COMPILER ${gcc_arm_toolchain_bin_path}/${gcc_arm_toolchain_prefix}-gcc${executable_extension})
-set(CMAKE_LINKER ${gcc_arm_toolchain_bin_path}/${gcc_arm_toolchain_prefix}-ld${executable_extension})
+# set(CMAKE_C_COMPILER_LINKER ${gcc_arm_toolchain_bin_path}/${gcc_arm_toolchain_prefix}-ld${executable_extension})
 # We must set the OBJCOPY setting into cache so that it's available to the
 # whole project. Otherwise, this does not get set into the CACHE and therefore
 # the build doesn't know what the OBJCOPY filepath is
@@ -55,10 +55,22 @@ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -include stm32f7xx_hal_def.h")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -include stm32f7xx_hal.h")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -include stm32f7xx.h")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -include stm32f7xx_hal_conf.h")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -include stm32f7xx_hal_cortex.h")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -include stm32f7xx_hal_dma.h")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -include stm32f7xx_hal_rcc.h")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -include stm32f7xx_hal_tim.h")
+
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSTM32F722xx")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DUSE_HAL_TIM_REGISTER_CALLBACKS=1")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAL_CORTEX_MODULE_ENABLED=1 -DHAL_TIM_MODULE_ENABLED=1")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu11 -g3")
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wl,-allow-multiple-definition")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -march=armv7e-m+fp -mfpu=fpv5-sp-d16 -mfloat-abi=hard")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wimplicit-function-declaration")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -march=armv7e-m+fp -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -ffunction-sections -fdata-sections")
 
 set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -x assembler-with-cpp")

@@ -14,27 +14,27 @@ def main(args):
         except:
             pass
 
-        if not os.path.exists(os.path.join(args.app_dir, "inc/stm32f7xx_hal_conf.h")):
-            shutil.copy(
-                os.path.join(
-                    sdk_base,
-                    "modules/stm32f7xx_hal_driver/Inc/stm32f7xx_hal_conf_template.h",
-                ),
-                os.path.join(args.app_dir, "inc/stm32f7xx_hal_conf.h"),
-            )
+        # if not os.path.exists(os.path.join(args.app_dir, "inc/stm32f7xx_hal_conf.h")):
+        #     shutil.copy(
+        #         os.path.join(
+        #             sdk_base,
+        #             "modules/stm32f7xx_hal_driver/Inc/stm32f7xx_hal_conf_template.h",
+        #         ),
+        #         os.path.join(args.app_dir, "inc/stm32f7xx_hal_conf.h"),
+        #     )
 
 
-        subprocess.run(
-            [
-                "cmake",
-                f"-DSDK_BASE={sdk_base}",
-                f"-C {sdk_base}/cmake/preload.cmake",
-                f"-DCMAKE_MODULE_PATH={sdk_base}/cmake",
-                f"-DCMAKE_TOOLCHAIN_FILE={sdk_base}/cmake/toolchain.cmake",
-                f"-S {args.app_dir}",
-                f"-B {args.build_dir}",
-            ]
-        )
+        # subprocess.run(
+        #     [
+        #         "cmake",
+        #         f"-DSDK_BASE={sdk_base}",
+        #         f"-C {sdk_base}/cmake/preload.cmake",
+        #         f"-DCMAKE_MODULE_PATH={sdk_base}/cmake",
+        #         f"-DCMAKE_TOOLCHAIN_FILE={sdk_base}/cmake/toolchain.cmake",
+        #         f"-S {args.app_dir}",
+        #         f"-B {args.build_dir}",
+        #     ]
+        # )
 
     if not os.path.exists(os.path.join(args.app_dir, "inc/stm32f7xx_hal_conf.h")):
         shutil.copy(

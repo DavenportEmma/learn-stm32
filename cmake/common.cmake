@@ -45,18 +45,26 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
 file(GLOB_RECURSE HAL ${SDK_BASE}/modules/stm32f7xx_hal_driver/Src/*.c)
 set(CMSIS_SYSTEM ${SDK_BASE}/modules/cmsis_device_f7/Source/Templates/system_stm32f7xx.c)
-set(CMSIS_STARTUP ${SDK_BASE}/modules/cmsis_device_f7/Source/Templates/gcc/startup_stm32f722xx.s)
+# set(CMSIS_STARTUP ${SDK_BASE}/modules/cmsis_device_f7/Source/Templates/gcc/startup_stm32f722xx.s)
+set(CMSIS_STARTUP ${SDK_BASE}/startup_stm32f722zetx.s)
+
 set(SOURCES
-    ${HAL}
+    # ${HAL}
+    ${SDK_BASE}/modules/stm32f7xx_hal_driver/Src/stm32f7xx_hal.c
+    ${SDK_BASE}/modules/stm32f7xx_hal_driver/Src/stm32f7xx_hal_cortex.c
+    ${SDK_BASE}/modules/stm32f7xx_hal_driver/Src/stm32f7xx_hal_tim.c
+    ${SDK_BASE}/modules/stm32f7xx_hal_driver/Src/stm32f7xx_hal_dma.c
+    ${SDK_BASE}/modules/stm32f7xx_hal_driver/Src/stm32f7xx_hal_tim_ex.c
+    ${SDK_BASE}/modules/stm32f7xx_hal_driver/Src/stm32f7xx_hal_gpio.c
     ${CMSIS_SYSTEM}
     ${CMSIS_STARTUP}
-    ${SDK_BASE}/modules/CMSIS_5/CMSIS
 )
+
 target_sources(${PROJECT_NAME} PUBLIC ${SOURCES})
 
 target_link_options(${PROJECT_NAME} PRIVATE
     -T${SDK_BASE}/STM32F722ZETx_FLASH.ld
-    --specs=nosys.specs
+    --specs=nosys.specs -DSTM32F722xx -g3
     -Wl,-Map=test.map-Wl,--gc-sections -static -Wl,--start-group -lc -lm -Wl,--end-group
 )
 
