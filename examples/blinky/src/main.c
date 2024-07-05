@@ -2,6 +2,7 @@
 #include "stm32f722xx.h"
 #include "stm32f7xx_hal.h"
 #include "stm32f7xx_hal_gpio.h"
+#include "stm32f7xx_hal_rcc_ex.h"
 
 int main() {
     HAL_Init();
@@ -11,7 +12,7 @@ int main() {
     g.Pull = GPIO_NOPULL;
     g.Speed = GPIO_SPEED_LOW;
     g.Pin = GPIO_PIN_7;
-    HAL_NVIC_SetPriority(SysTick_IRQn,14,0);
+    // HAL_NVIC_SetPriority(SysTick_IRQn,14,0);
     HAL_GPIO_Init(GPIOB, &g);
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, GPIO_PIN_SET);
 

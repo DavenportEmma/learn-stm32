@@ -9,6 +9,7 @@
 #include "stm32f7xx_hal_rcc.h"
 #include "stm32f7xx_hal_rcc_ex.h"
 #include "stm32f7xx_hal_tim.h"
+#include "stm32f7xx_hal_flash_ex.h"
 #define LED_PIN GPIO_PIN_7
 #define LED_PORT GPIOB
 
@@ -23,22 +24,28 @@ void main(void) {
 
     htim.Instance = TIM2;
     htim.Init.Prescaler = 0X0000;
-    htim.Init.Period = 0xFFFF;
+    htim.Init.Period = 0x0001;
     htim.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
     htim.Init.CounterMode = TIM_COUNTERMODE_UP;
     htim.Init.RepetitionCounter = 0;
-    // htim.Init.AutoReloadPreload = 0x0000;
+    htim.State;
+    htim.Init.AutoReloadPreload = 0x0000;
 
-    // sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-    // sClockSourceConfig.ClockPolarity = TIM_CLOCKPOLARITY_NONINVERTED;
-    // sClockSourceConfig.ClockPrescaler = TIM_ETRPRESCALER_DIV1;
-    // sClockSourceConfig.ClockFilter = 0x0;
+    sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+    sClockSourceConfig.ClockPolarity = TIM_CLOCKPOLARITY_NONINVERTED;
+    sClockSourceConfig.ClockPrescaler = TIM_ETRPRESCALER_DIV1;
+    sClockSourceConfig.ClockFilter = 0x0;
 
-    // HAL_TIM_ConfigClockSource(&htim, &sClockSourceConfig);
+    HAL_TIM_ConfigClockSource(&htim, &sClockSourceConfig);
     HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(TIM2_IRQn);
     h = HAL_TIM_Base_Init(&htim);
     h = HAL_TIM_Base_Start_IT(&htim);
+    // htim.State = HAL_TIM_STATE_BUSY;
+    // __HAL_TIM_ENABLE_IT(&htim, TIM_IT_UPDATE);
+    // __HAL_TIM_ENABLE(&htim);
+    // hal tim base start it is fucked here is my own implementation
+
     h = HAL_TIM_RegisterCallback(&htim, HAL_TIM_PERIOD_ELAPSED_CB_ID, HAL_TIM_PeriodElapsedCallback);
 
     while(1) {
@@ -50,6 +57,47 @@ void main(void) {
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
     int i = 1;
+}
+
+static void SystemClock_Config(void)
+{
+    RCC_ClkInitTypeDef RCC_ClkInitStruct;
+    RCC_OscInitTypeDef RCC_OscInitStruct;
+    
+    /* Enable HSE Oscillator and activate PLL with HSE as source
+    Note: Since there is no oscillator on board, HSE clock is derived from STLink */
+    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+    RCC_OscInitStruct.HSEState = RCC_HSE_BYPASS;
+    RCC_OscInitStruct.HSIState = RCC_HSI_OFF;
+    RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+    RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+    RCC_OscInitStruct.PLL.PLLM = 8;
+    RCC_OscInitStruct.PLL.PLLN = 432;  
+    RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+    RCC_OscInitStruct.PLL.PLLQ = 9;
+    if(HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+    {
+        while(1) {};
+    }
+    
+    /* Activate the OverDrive to reach the 216 Mhz Frequency */
+    if(HAL_PWREx_EnableOverDrive() != HAL_OK)
+    {
+        while(1) {};
+    }
+    
+    
+    /* Select PLL as system clock source and configure the HCLK, PCLK1 and PCLK2 
+      clocks dividers */
+    RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2);
+    RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+    RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;  
+    RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;  
+    if(HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_7) != HAL_OK)
+    {
+        while(1) {};
+    }
 }
 
 // void SystemClock_Config(void)
