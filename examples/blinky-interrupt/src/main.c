@@ -16,20 +16,22 @@
 TIM_HandleTypeDef htim;
 TIM_ClockConfigTypeDef sClockSourceConfig;
 
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*);
+
 void main(void) {
     HAL_StatusTypeDef h = HAL_Init();
-    // SystemClock_Config();
+    SystemClock_Config();
     HAL_TIM_Base_MspInit(&htim);
     __HAL_RCC_TIM2_CLK_ENABLE();
 
     htim.Instance = TIM2;
-    htim.Init.Prescaler = 0X0000;
-    htim.Init.Period = 0x0001;
+    htim.Init.Prescaler = 14399;
+    htim.Init.Period = 4999;
     htim.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
     htim.Init.CounterMode = TIM_COUNTERMODE_UP;
     htim.Init.RepetitionCounter = 0;
     htim.State;
-    htim.Init.AutoReloadPreload = 0x0000;
+    htim.Init.AutoReloadPreload = 0xFFFF;
 
     sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
     sClockSourceConfig.ClockPolarity = TIM_CLOCKPOLARITY_NONINVERTED;
@@ -40,13 +42,17 @@ void main(void) {
     HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(TIM2_IRQn);
     h = HAL_TIM_Base_Init(&htim);
-    h = HAL_TIM_Base_Start_IT(&htim);
+    HAL_NVIC_ClearPendingIRQ(TIM2_IRQn);
+    TIM2->SR &= !TIM_SR_UIF;
+    // __HAL_TIM_CLEAR_FLAG(&htim7, TIM_FLAG_UPDATE);
+    __HAL_TIM_ENABLE(&htim);
+    // h = HAL_TIM_Base_Start_IT(&htim);
     // htim.State = HAL_TIM_STATE_BUSY;
     // __HAL_TIM_ENABLE_IT(&htim, TIM_IT_UPDATE);
     // __HAL_TIM_ENABLE(&htim);
     // hal tim base start it is fucked here is my own implementation
-
-    h = HAL_TIM_RegisterCallback(&htim, HAL_TIM_PERIOD_ELAPSED_CB_ID, HAL_TIM_PeriodElapsedCallback);
+    pTIM_CallbackTypeDef(*HAL_TIM_PeriodElapsedCallback_ptr)(TIM_HandleTypeDef) = &HAL_TIM_PeriodElapsedCallback;
+    h = HAL_TIM_RegisterCallback(&htim, HAL_TIM_PERIOD_ELAPSED_CB_ID, HAL_TIM_PeriodElapsedCallback_ptr);
 
     while(1) {
       int a = 1;
@@ -59,18 +65,18 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
     int i = 1;
 }
 
-static void SystemClock_Config(void)
+void SystemClock_Config(void)
 {
     RCC_ClkInitTypeDef RCC_ClkInitStruct;
     RCC_OscInitTypeDef RCC_OscInitStruct;
     
     /* Enable HSE Oscillator and activate PLL with HSE as source
     Note: Since there is no oscillator on board, HSE clock is derived from STLink */
-    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-    RCC_OscInitStruct.HSEState = RCC_HSE_BYPASS;
-    RCC_OscInitStruct.HSIState = RCC_HSI_OFF;
+    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+    RCC_OscInitStruct.HSEState = RCC_HSE_OFF;
+    RCC_OscInitStruct.HSIState = RCC_HSI_ON;
     RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-    RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+    RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
     RCC_OscInitStruct.PLL.PLLM = 8;
     RCC_OscInitStruct.PLL.PLLN = 432;  
     RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
