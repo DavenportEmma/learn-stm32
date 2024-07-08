@@ -38,24 +38,14 @@ set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 add_executable(${PROJECT_NAME})
 
 target_include_directories(${PROJECT_NAME} PUBLIC
-    ${SDK_BASE}/modules/stm32f7xx_hal_driver/Inc
     ${SDK_BASE}/modules/CMSIS_5/CMSIS/Core/Include
     ${SDK_BASE}/modules/cmsis_device_f7/Include
 )
 
-file(GLOB_RECURSE HAL ${SDK_BASE}/modules/stm32f7xx_hal_driver/Src/*.c)
 set(CMSIS_SYSTEM ${SDK_BASE}/modules/cmsis_device_f7/Source/Templates/system_stm32f7xx.c)
-# set(CMSIS_STARTUP ${SDK_BASE}/modules/cmsis_device_f7/Source/Templates/gcc/startup_stm32f722xx.s)
-set(CMSIS_STARTUP ${SDK_BASE}/startup_stm32f722zetx.s)
+set(CMSIS_STARTUP ${SDK_BASE}/modules/cmsis_device_f7/Source/Templates/gcc/startup_stm32f722xx.s)
 
 set(SOURCES
-    # ${HAL}
-    ${SDK_BASE}/modules/stm32f7xx_hal_driver/Src/stm32f7xx_hal.c
-    ${SDK_BASE}/modules/stm32f7xx_hal_driver/Src/stm32f7xx_hal_cortex.c
-    ${SDK_BASE}/modules/stm32f7xx_hal_driver/Src/stm32f7xx_hal_tim.c
-    ${SDK_BASE}/modules/stm32f7xx_hal_driver/Src/stm32f7xx_hal_dma.c
-    ${SDK_BASE}/modules/stm32f7xx_hal_driver/Src/stm32f7xx_hal_tim_ex.c
-    ${SDK_BASE}/modules/stm32f7xx_hal_driver/Src/stm32f7xx_hal_gpio.c
     ${CMSIS_SYSTEM}
     ${CMSIS_STARTUP}
 )

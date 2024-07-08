@@ -1,13 +1,5 @@
 #include <stdint.h>
-#include "stm32f7xx_hal_def.h"
-#include "stm32f7xx_hal_cortex.h"
-#include "stm32f7xx_hal.h"
-#include "stm32f7xx.h"
-#include "stm32f7xx_hal_conf.h"
 #include "stm32f722xx.h"
-#include "stm32f7xx_hal_tim.h"
-
-TIM_HandleTypeDef htim;
 
 #define RCC_BASE      0x40023800
 #define RCC_APB1ENR   (*(volatile uint32_t *)(RCC_BASE + 0x40))
