@@ -1,4 +1,4 @@
-#include <stdint.h>
+// #include <stdint.h>
 #include "stm32f722xx.h"
 
 #define RCC_APB1ENR     (*(volatile uint32_t *)(RCC_BASE + 0x40))
@@ -36,18 +36,11 @@ int main(void) {
     // Set auto-reload value for a desired period
     TIM2_ARR = 1000 - 1;  // This sets the timer period to 1 second
 
-    // Set the output compare value
-    TIM2_CCR1 = 500;  // This sets the compare value to trigger an interrupt at 0.5 seconds
-
-    // Configure the output compare mode
-    TIM2_CCMR1 &= ~(0xFF);
-    TIM2_CCMR1 |= (0x30);  // Set to toggle mode on compare match
-
     // Enable the capture/compare channel
     TIM2_CCER |= 1;
 
     // Enable the update interrupt
-    TIM2_DIER |= 1 << 1;  // Enable CC1 interrupt
+    TIM2_DIER |= 1;  // Enable overflow interrupt
 
     // Enable the TIM2 interrupt in the NVIC
     NVIC_ISER0 |= (1 << TIM2_IRQn);

@@ -36,7 +36,7 @@ void init_timer() {
     TIM2_PSC = 16 - 1;  // Assuming a 16 MHz clock, this sets the timer clock to 1 MHz
 
     // Set auto-reload value for a desired period
-    TIM2_ARR = 1000 - 1;  // This sets the timer period to 1ms
+    TIM2_ARR = 44100 - 1;  // This sets the timer period to 1ms
 
     // Enable the capture/compare channel
     TIM2_CCER |= 1;
@@ -69,8 +69,8 @@ void init_dac() {
 }
 
 int count = 0;
-int sample_rate = 1000;
-int f = 10;
+int sample_rate = 44100;
+int f = 1000;
 float phase = 0;
 int amplitude = 0xFFF - 1;
 
