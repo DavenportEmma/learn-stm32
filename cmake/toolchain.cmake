@@ -60,6 +60,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu11 -g3 -O0 -ggdb3")
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wl,-allow-multiple-definition")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wimplicit-function-declaration")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -nodefaultlibs")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -march=armv7e-m+fp -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -ffunction-sections -fdata-sections")
 
 set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -x assembler-with-cpp")

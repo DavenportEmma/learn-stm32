@@ -40,6 +40,7 @@ add_executable(${PROJECT_NAME})
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${SDK_BASE}/modules/CMSIS_5/CMSIS/Core/Include
     ${SDK_BASE}/modules/cmsis_device_f7/Include
+    ${SDK_BASE}/modules/gcc-arm-none-eabi-10.3-2021.10/arm-none-eabi/include
 )
 
 set(CMSIS_SYSTEM ${SDK_BASE}/modules/cmsis_device_f7/Source/Templates/system_stm32f7xx.c)
@@ -58,7 +59,7 @@ target_link_options(${PROJECT_NAME} PRIVATE
     -Wl,-Map=test.map-Wl,--gc-sections -static -Wl,--start-group -lc -lm -Wl,--end-group
 )
 
-target_link_libraries(${PROJECT_NAME})
+target_link_libraries(${PROJECT_NAME} m)
 
 add_custom_command(
         TARGET ${PROJECT_NAME} POST_BUILD
