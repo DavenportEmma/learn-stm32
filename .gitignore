@@ -1,3 +1,4 @@
 modules/
 *.zip
 build-*
+*.log
