@@ -26,6 +26,12 @@ void init_uart(void) {
     USART3->CR1 |= 0x8; // enable tx
 }
 
+void init_gpio(void) {
+    RCC->AHB1ENR |= 2;
+    GPIOB->MODER |= 0x4000;
+    GPIOB->ODR |= 0x80;
+}
+
 void send(char* msg, int len) {
     for(int i = 0; i < len; i++) {
         uint32_t timeout_counter = 0;
@@ -53,14 +59,27 @@ void UARTTask() {
     }
 }
 
+void blinkLEDTask() {
+    TickType_t xLastWakeTime;
+    const TickType_t xFrequency = 1000;
+    xLastWakeTime = xTaskGetTickCount();
+
+    while(1) {
+        vTaskDelayUntil(&xLastWakeTime, xFrequency);
+        GPIOB->ODR ^= 0x80;
+        xLastWakeTime = xTaskGetTickCount();
+    }
+}
+
 int main(void) {
     init_uart();
+    init_gpio();
 
     char msg[] = "uart initialised\n\r";
     send(msg, sizeof(msg)-1);
 
     xTaskCreate(UARTTask, "UART Task", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
-
+    xTaskCreate(blinkLEDTask, "blink led task", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
     vTaskStartScheduler();
 
     while(1) {
