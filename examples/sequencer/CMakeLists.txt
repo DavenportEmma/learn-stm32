@@ -7,6 +7,7 @@ project(sequencer C)
 target_sources(${PROJECT_NAME} PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/start_up.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tasks.c
     ${SDK_BASE}/src/uart.c
     ${SDK_BASE}/src/midi.c
     ${SDK_BASE}/modules/FreeRTOS/FreeRTOS/Source/portable/GCC/ARM_CM7/r0p1/port.c
