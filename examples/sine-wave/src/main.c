@@ -28,6 +28,9 @@
 #define DAC_CR          (*(volatile uint32_t *)(DAC_BASE + 0x00))
 #define DAC_DHR12R1     (*(volatile uint32_t *)(DAC_BASE + 0x08))
 
+#define GPIOB_MODER     (*(volatile uint32_t *)(GPIOB_BASE + 0x00))
+#define GPIOB_ODR       (*(volatile uint32_t *)(GPIOB_BASE + 0x14))
+
 void init_timer() {
     // Enable the TIM2 clock
     RCC_APB1ENR |= TIM2EN;
@@ -68,6 +71,15 @@ void init_dac() {
     DAC_DHR12R1 = 0x000;
 }
 
+void init_gpio() {
+    // IO port B clock enable
+    RCC_AHB1ENR |= 2;
+
+    // Set GPIOB pin 0 (user LED 1) to output
+    GPIOB_MODER |= 0x4000;
+
+}
+
 int count = 0;
 int sample_rate = 44100;
 int f = 1000;
@@ -76,6 +88,7 @@ int amplitude = 0xFFF - 1;
 
 int main(void) {
     init_dac();
+    init_gpio();
     init_timer();
     // i = sinf(0);
     // i = sinf(0.5);
@@ -92,7 +105,7 @@ void TIM2_IRQHandler(void) {
         
         float x = 2*PI*(count+phase)/(sample_rate/f);
         x = sinf(x);
-        int32_t dac_value = (uint32_t)((x + 1.0) * 2047.5);
+        uint32_t dac_value = (uint32_t)((x + 1.0) * 2047.5);
         DAC_DHR12R1 = dac_value;
 
         count++;
