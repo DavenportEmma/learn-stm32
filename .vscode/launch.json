@@ -21,6 +21,28 @@
                 {"text": "load"},
                 {"text": "monitor reset halt"}
             ]
+        },
+        {
+            "name": "debug sequencer",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "C:/Users/conor/Documents/GitHub/learn-stm32/build-sequencer/sequencer.elf",
+            "cwd": "${workspaceFolder}",
+            "MIMode": "gdb",
+            "miDebuggerPath": "${workspaceFolder}/modules/gcc-arm-none-eabi-10.3-2021.10/bin/arm-none-eabi-gdb.exe",
+            "debugServerPath": "${workspaceFolder}/modules/openocd/xpack-openocd-0.12.0-2/bin/openocd.exe",
+            "miDebuggerArgs": "-se C:/Users/conor/Documents/GitHub/learn-stm32/build-sequencer/sequencer.elf",
+            "debugServerArgs": "--file board/st_nucleo_f7.cfg --file interface/stlink.cfg",
+            "filterStderr": true,
+            "serverStarted": "Info : Listening on port 3333 for gdb connections",
+            "serverLaunchTimeout": 10000,
+            "launchCompleteCommand": "None",
+            "setupCommands": [
+                {"text": "target remote localhost:3333"},
+                {"text": "monitor reset halt"},
+                {"text": "load"},
+                {"text": "monitor reset halt"}
+            ]
         }
     ],
     "inputs": [
