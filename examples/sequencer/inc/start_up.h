@@ -3,7 +3,7 @@
 
 #include "midi.h"
 
-void all_notes_off();
+int all_notes_off();
 void start_up();
 
 #endif
