@@ -133,6 +133,7 @@ typedef struct {
     MIDIChannel_TypeDef channel;
     MIDINote_TypeDef note;
     char velocity;
+    char glide;
 } MIDIPacket_TypeDef;
 
 typedef struct {
