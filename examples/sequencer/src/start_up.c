@@ -3,7 +3,7 @@
 #include "midi.h"
 #include "uart.h"
 
-void all_notes_off() {
+int all_notes_off() {
     // turn off all notes
     MIDICC_TypeDef *c;
     c->status = CONTROLLER;
@@ -11,7 +11,7 @@ void all_notes_off() {
     c->control = ALL_NOTES_OFF;
     c->value = 0;
 
-    send_midi_control(USART1, c);
+    return send_midi_control(USART1, c);
 }
 
 void start_up() {
