@@ -4,6 +4,25 @@
 #include "cmsis_gcc.h"
 #include "stm32f722xx.h"
 
+/*
+TODO
+
+simple keyboard diode matrix on breadboard to test input polling
+    then move on to using encoder and decoder ICs
+
+rotary encoder test
+
+outputing multiple midi streams
+
+led matrix test
+    then move on to using enocder and decoder ICs
+
+midi sync in
+
+using a flash memory IC for storing sequence data
+
+*/
+
 // pd8
 #define GPIOD_AFRH      (*(volatile uint32_t *)(GPIOD_BASE + 0x24))
 
