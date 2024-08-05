@@ -35,21 +35,9 @@ MIDIPacket_TypeDef midi_stack[] = {
 };
 
 void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName) {
+    char msg[] = "stack overflow\n\r";
+    send(USART3, msg, sizeof(msg)-1);
     __disable_irq();
-}
-
-void MIDI_task() {
-    uint8_t stack_counter = 0;
-
-    while(1) {
-        send_midi_note(USART1, &midi_stack[stack_counter]);
-
-        stack_counter++;
-        if(stack_counter >= 8) {
-            stack_counter = 0;
-        }
-        vTaskDelay(pdMS_TO_TICKS(50));
-    }
 }
 
 int main(void) {
