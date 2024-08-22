@@ -48,6 +48,34 @@ int check_nack_i2c() {
     }
 }
 
+int send_byte_i2c(uint8_t address, uint8_t data) {
+    if(start_i2c_tx(address, 1) == 1) {
+        return 1;
+    }
+
+    while(!(I2C2->ISR & I2C_ISR_TXIS)) {
+        if(check_nack_i2c() == 1) {
+            I2C2->CR2 |= I2C_CR2_STOP;
+            return 1;
+        }
+    }
+
+    I2C2->TXDR = data;
+
+    while(!(I2C2->ISR & I2C_ISR_TC)) {
+        if(check_nack_i2c() == 1) {
+            I2C2->CR2 |= I2C_CR2_STOP;
+            return 1;
+        }
+    }
+
+    stop_i2c_tx();
+
+    while (!(I2C2->ISR & I2C_ISR_STOPF)) {}
+
+    return 0;
+}
+
 int send_i2c(uint8_t address, uint8_t* data, uint8_t len) {
     // set addressing mode in cr2
     // set slvae address in sadd bits
