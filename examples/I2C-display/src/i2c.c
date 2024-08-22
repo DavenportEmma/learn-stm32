@@ -12,14 +12,7 @@ void init_i2c() {
     GPIOF->PUPDR |= 0x5;    // pf0 pf1 pull up resistors
 
     RCC->APB1ENR |= (1 << 22);  // set i2c peripheral clock
-    /*
-    presc 3
-    scldel 0x4
-    sdadel 0x2
-    sclh 0xf
-    scll 0x13
-    */
-    I2C2->TIMINGR |= (3 << 28) | (4 << 20) | (2 << 16) | (0xF << 8) | 0x13;
+    I2C2->TIMINGR |= (3 << 28) | (4 << 20) | (2 << 16) | (0xC3 << 8) | 0xC7;
     I2C2->CR1 |= (1 << 0);  // set pe bit in cr1 register
 }
 
