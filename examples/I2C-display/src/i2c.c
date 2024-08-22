@@ -101,7 +101,7 @@ int send_i2c(uint8_t address, uint8_t* data, uint8_t len) {
 
     stop_i2c_tx();
 
-    while (I2C2->ISR & I2C_ISR_STOPF) {}
+    while (!(I2C2->ISR & I2C_ISR_STOPF)) {}
 
     return 0;
 }
