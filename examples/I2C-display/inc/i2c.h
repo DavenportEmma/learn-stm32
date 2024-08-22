@@ -8,7 +8,7 @@
 #define GPIOF_AFRL      (*(volatile uint32_t *)(GPIOF_BASE + 0x20))
 
 void init_i2c();
-int start_i2c_Tx(uint8_t address, uint8_t len);
+int start_i2c_tx(uint8_t address, uint8_t len);
 void stop_i2c_tx();
 int check_nack_i2c();
 int send_i2c(uint8_t address, uint8_t* data, uint8_t len);
