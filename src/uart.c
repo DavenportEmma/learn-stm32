@@ -1,4 +1,5 @@
 #include "stm32f722xx.h"
+#include "uart.h"
 
 #define SEND_TIMEOUT 10000
 
@@ -46,7 +47,7 @@ int init_uart(USART_TypeDef* uart, uint16_t baud) {
     return 0;
 }
 
-int send(USART_TypeDef* u, char* msg, int len) {
+int send_uart(USART_TypeDef* u, char* msg, int len) {
     for(int i = 0; i < len; i++) {
         uint32_t timeout_counter = 0;
 

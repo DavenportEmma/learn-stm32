@@ -23,5 +23,5 @@ int send_midi_control(
     buffer[1] = p->control;
     buffer[2] = p->value;
 
-    return send(u, buffer, 3);
+    return send_uart(u, buffer, 3);
 }
