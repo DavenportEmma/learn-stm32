@@ -1,6 +1,8 @@
 #ifndef _SSD1306_H
 #define _SSD1306_H
 
+#include "stdint.h"
+
 #define SSD1306_ADDR 0x3C	// i2c address of display module
 #define HEIGHT 64			// 128 x 64 px display
 #define WIDTH 128
@@ -41,6 +43,8 @@
 #define SSD1306_ACTIVATE_SCROLL                      0x2F // Start scroll
 #define SSD1306_SET_VERTICAL_SCROLL_AREA             0xA3 // Set scroll range
 
-void init_ssd1306();
+int command_ssd1306(uint8_t command);
+int init_ssd1306();
+int display_ssd1306(uint8_t* buffer);
 
 #endif
