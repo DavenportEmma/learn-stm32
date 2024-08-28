@@ -26,39 +26,6 @@ static void flash_tempo_led(xTimerHandle t) {
     }
 }
 
-void uint8_t_to_char(char* str, uint8_t value) {
-    int i = 0;
-    uint8_t digit;
-    int start = i;
-    
-    // Handle zero as a special case
-    if (value == 0) {
-        str[i] = '\0';
-        str[i++] = '\r';
-        str[i++] = '\n';
-        str[i++] = '0';
-        return;
-    } else {
-        // Find the position to start inserting digits (we're inserting in reverse)
-        while (value > 0) {
-            digit = value % 10;         // Get the last digit
-            str[i++] = '0' + digit;     // Convert it to ASCII and store in the string
-            value /= 10;                // Remove the last digit
-        }
-        str[i++] = '\n';
-        str[i++] = '\r';
-        str[i] = '\0';                  // Null-terminate the string
-    }
-
-
-    // Reverse the string to correct the order of digits
-    for (int j = start, k = i - 1; j < k; j++, k--) {
-        char temp = str[j];
-        str[j] = str[k];
-        str[k] = temp;
-    }
-}
-
 void step_task(void *pvParameters) {
     MIDISequence_TypeDef* mysequence = (MIDISequence_TypeDef*) pvParameters;
 
