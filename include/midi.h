@@ -8,7 +8,9 @@
 typedef enum {
     NOTE_OFF    = 0x80,
     NOTE_ON     = 0x90,
-    CONTROLLER = 0xB0
+    CONTROLLER = 0xB0,
+    USART_START_BYTE = 0xF4,
+    USART_END_BYTE = 0xF5
 } MIDIStatus_TypeDef;
 
 typedef enum {
