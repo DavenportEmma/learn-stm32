@@ -25,3 +25,15 @@ int send_midi_control(
 
     return send_uart(u, buffer, 3);
 }
+
+void all_channels_off(USART_TypeDef* u) {
+    MIDICC_TypeDef* cc;
+    
+    for(uint8_t i = 0; i < 16; i++) {
+        cc->channel = i;
+        cc->status = CONTROLLER;
+        cc->control = ALL_NOTES_OFF;
+        cc->value = 0;
+        send_midi_control(u, cc);
+    }
+}

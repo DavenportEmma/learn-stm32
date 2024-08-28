@@ -172,4 +172,6 @@ int send_midi_control(
     MIDICC_TypeDef* p
 );
 
+void all_channels_off(USART_TypeDef* u);
+
 #endif  // MIDI_H
