@@ -1,7 +1,6 @@
 #include "stm32f722xx.h"
 #include "uart.h"
-
-#define SEND_TIMEOUT 10000
+#include "config.h"
 
 int init_uart(USART_TypeDef* uart, uint16_t baud) {
     #ifndef SYS_CLK
