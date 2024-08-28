@@ -148,7 +148,7 @@ typedef struct {
 } MIDIStep_TypeDef;
 
 typedef struct {
-    uint8_t divisor;
+    uint8_t prescaler;
     uint8_t counter;
     uint8_t num_steps;
     MIDIChannel_TypeDef channel;
