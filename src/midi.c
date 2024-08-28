@@ -11,7 +11,7 @@ int send_midi_note(
     buffer[1] = p->note;
     buffer[2] = p->velocity;
 
-    return send(u, buffer, 3);
+    return send_uart(u, buffer, 3);
 }
 
 int send_midi_control(
