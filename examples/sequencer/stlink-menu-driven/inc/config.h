@@ -5,4 +5,6 @@
 #define PRINT_UART USART3
 #define STLINK_UART USART3
 
+extern volatile int usart_rx_data;
+
 #endif
