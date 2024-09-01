@@ -2,46 +2,45 @@
 #include "uart.h"
 #include "config.h"
 
-int init_uart(USART_TypeDef* uart, uint16_t baud) {
+int init_uart(USART_Handler* u) {
     #ifndef SYS_CLK
         #define SYS_CLK 16000000
     #endif
 
-    uint8_t uartNum;
-    GPIO_TypeDef* g;
-    uint8_t gpioPin;
+    USART_TypeDef* uart = u->uart;
+    GPIO_TypeDef* gpio = u->gpio;
 
-    if(uart == USART1) {
-        uartNum = 1;
-        g = GPIOB;
-        gpioPin = 6;
-        
-        RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN_Msk;    // enable clock for gpio
-        g->AFR[0] |= 0x7000000;                     // set alternate function to af7
-        RCC->APB2ENR |= 0x10;                       // Enable clock for uart
-    } else if (uart == USART3) {
-        // this uart is connected to the stlink uart
-        uartNum = 3;
-        g = GPIOD;
-        gpioPin = 8;
-        
-        RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN_Msk;
-        g->AFR[1] |= 0x7;
-        RCC->APB1ENR |= (1 << 18);
-    } else {
-        return 1;
+    switch((unsigned long)uart) {
+        case (unsigned long)USART1:
+            RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;
+            RCC->APB2ENR |= RCC_APB2ENR_USART1EN;
+            RCC->DCKCFGR2 |= (1 << ((1 - 1) * 2));
+            break;
+        case (unsigned long)USART3:
+            RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;
+            RCC->APB1ENR |= RCC_APB1ENR_USART3EN;
+            RCC->DCKCFGR2 |= (1 << ((3 - 1) * 2));
+            break;
+        default:
+            return 1;
     }
-    
-    g->MODER &= ~(0x3 << (gpioPin * 2));    // Clear mode bits for gpio
-    g->MODER |= 2 << (gpioPin * 2);         // set alternate mode for pin
 
-    RCC->DCKCFGR2 |= (1 << ((uartNum - 1) * 2));
-    RCC->CR |= RCC_CR_HSION;
+    // set alternate mode 7 for tx and rx pins
+    gpio->AFR[u->afr_reg] |= (7 << ((u->tx_pin-(8*u->afr_reg))*4)) | (7 << ((u->rx_pin-(8*u->afr_reg))*4));
+
+    gpio->MODER &= ~(0x3 << (u->tx_pin * 2) | 0x3 << (u->rx_pin * 2));  // Clear mode bits for gpio
+    gpio->MODER |= (2 << (u->tx_pin * 2)) | (2 << (u->rx_pin * 2));     // set alternate mode for pin
+    RCC->CR |= RCC_CR_HSION;    // set high speed mode for usart
 
     uart->CR1 &= ~(0xFFFFFFFF);   // clear cr1
-    uart->BRR |= SYS_CLK / baud;  // Assuming APB2 clock is 16 MHz
+    uart->BRR |= SYS_CLK / u->baud;  // Assuming APB2 clock is 16 MHz
+
+    if(u->rx_interrupts) {
+        uart->CR1 |= (1 << 5);
+    }
+    
+    uart->CR1 |= 0xC; // enable tx ad rx
     uart->CR1 |= 0x1; // enable usart
-    uart->CR1 |= 0x8; // enable tx
 
     return 0;
 }
