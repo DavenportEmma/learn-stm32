@@ -61,3 +61,9 @@ int send_uart(USART_TypeDef* u, char* msg, int len) {
 
     return 0;
 }
+
+int getchar() {
+    while(!(STLINK_UART->ISR & USART_ISR_RXNE)) {}
+    STLINK_UART->RQR |= USART_RQR_RXFRQ;  // Example: Request a flush of the RX buffer (clears RXNE flag)
+    return STLINK_UART->RDR - '0';
+}
