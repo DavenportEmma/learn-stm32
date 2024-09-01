@@ -3,7 +3,10 @@
 
 #include "stm32f722xx.h"
 
-int init_uart(USART_TypeDef* uart, uint16_t baud);
+#ifndef MAX_PRINT_LENGTH
+#define MAX_PRINT_LENGTH 64
+#endif
+
 
 int send_uart(USART_TypeDef* u, char* msg, int len);
 
