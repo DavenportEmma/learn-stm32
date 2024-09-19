@@ -9,6 +9,9 @@ typedef enum {
     PITCH_MENU = 4,
     VELOCITY_MENU = 5,
     GLIDE_MENU = 6,
+    CHANGE_PRESCALER = 7,
+    SET_MIDI_CHANNEL = 8;
+    SET_ACTIVE_STEPS = 9;
 } MenuLUT;
 
 #endif
