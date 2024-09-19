@@ -19,17 +19,42 @@ void menu_task() {
         switch(menu_id) {
             case SEQUENCE_SELECT:
                 print("*** select a sequence ***\n\r\0");
+                /*
+                    print the sequences and show which ones are active
+                */
                 sequence = wait_for_input();
                 menu_id = FUNCTION_SELECT;
                 break;
             case FUNCTION_SELECT:
                 print("*** choose function ***\n\r\0");
+                /*
+                    after a sequence has been selected print:
+                        - active steps
+                        - prescaler
+                        - midi channel  
+                */
                 print("1 - modify step\n\r\0");
+                print("2 - change prescaler\n\r\0");
+                print("3 - set midi channel\n\r\0");
+                print("4 - set active steps\n\r\0");
+                print("5 - clear sequence\n\r\0");
                 int func = wait_for_input();
                 switch(func) {
                     case 1:
                         menu_id = STEP_SELECT;
-                    break;
+                        break;
+                    case 2:
+                        menu_id = CHANGE_PRESCALER;
+                        break;
+                    case 3:
+                        menu_id = SET_MIDI_CHANNEL;
+                        break;
+                    case 4:
+                        menu_id = SET_ACTIVE_STEPS;
+                        break;
+                    case 5:
+                        // clear sequence
+                        break;
                 }
                 break;
             case STEP_SELECT:
