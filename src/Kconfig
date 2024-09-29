@@ -1,0 +1,50 @@
+menu "FreeRTOS"
+
+config FREERTOS
+    bool "Include FreeRTOS"
+    default n
+
+endmenu
+
+menu "MIDI"
+
+config MIDI
+    bool "Enable MIDI"
+    default n
+
+config MIDI_UART
+    string "UART instance used by MIDI"
+    default "USART1"
+
+endmenu
+
+menu "Sequencer"
+
+config SEQUENCER
+    bool "Enable sequencer"
+    default n
+
+config PPQN
+    int "PPQN"
+    default 96
+    depends on SEQUENCER
+
+endmenu
+
+menu "UART"
+
+config UART
+    bool "Enable UART"
+    default n
+
+config UART_SEND_TIMEOUT
+    int "UART send timeout"
+    default 10000
+    depends on UART
+
+config PRINT_UART
+    string "UART instance used by print()"
+    default "USART3"
+    depends on UART
+
+endmenu
