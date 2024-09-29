@@ -52,5 +52,11 @@
         "path": "modules/FreeRTOS",
         "url": "https://github.com/FreeRTOS/FreeRTOS.git",
         "ref": "master"
+    },
+    {
+        "name": "kconfiglib",
+        "path": "modules/Kconfiglib",
+        "url": "https://github.com/ulfalizer/Kconfiglib.git",
+        "ref": "061e71f7d78cb057762d88de088055361863deff"
     }
 ]
