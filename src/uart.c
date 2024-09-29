@@ -1,11 +1,33 @@
 #include "stm32f722xx.h"
+#include "autoconf.h"
 #include "uart.h"
 #include "config.h"
+
+USART_TypeDef* STLINK_UART;
+USART_TypeDef* PRINT_UART;
 
 int init_uart(USART_Handler* u) {
     #ifndef SYS_CLK
         #define SYS_CLK 16000000
     #endif
+
+    switch(CONFIG_STLINK_UART) {
+        case 1:
+            STLINK_UART = USART1;
+            break;
+        case 3:
+            STLINK_UART = USART3;
+            break;
+    }
+
+     switch(CONFIG_PRINT_UART) {
+        case 1:
+            PRINT_UART = USART1;
+            break;
+        case 3:
+            PRINT_UART = USART3;
+            break;
+    }
 
     USART_TypeDef* uart = u->uart;
     GPIO_TypeDef* gpio = u->gpio;
@@ -51,7 +73,7 @@ int send_uart(USART_TypeDef* u, char* msg, int len) {
 
         while(!(u->ISR & (1 << 7))) {
             timeout_counter++;
-            if(timeout_counter >= SEND_TIMEOUT) {
+            if(timeout_counter >= CONFIG_UART_SEND_TIMEOUT) {
                 return 1;
             }
         }
@@ -71,7 +93,7 @@ int print(char *msg) {
 
         while(!(PRINT_UART->ISR & (1 << 7))) {
             timeout_counter++;
-            if(timeout_counter >= SEND_TIMEOUT) {
+            if(timeout_counter >= CONFIG_UART_SEND_TIMEOUT) {
                 return 1;
             }
         }
