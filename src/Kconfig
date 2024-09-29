@@ -13,8 +13,8 @@ config MIDI
     default n
 
 config MIDI_UART
-    string "UART instance used by MIDI"
-    default "USART1"
+    int "UART instance used by MIDI"
+    default 1
 
 endmenu
 
@@ -27,6 +27,11 @@ config SEQUENCER
 config PPQN
     int "PPQN"
     default 96
+    depends on SEQUENCER
+
+config MAX_SEQUENCE_LENGTH
+    int "Max sequence length"
+    default 64
     depends on SEQUENCER
 
 endmenu
@@ -42,9 +47,14 @@ config UART_SEND_TIMEOUT
     default 10000
     depends on UART
 
+config STLINK_UART
+    int "UART instance used by ST-LINK"
+    default 3
+    depends on UART
+
 config PRINT_UART
-    string "UART instance used by print()"
-    default "USART3"
+    int "UART instance used by print()"
+    default 3
     depends on UART
 
 endmenu
