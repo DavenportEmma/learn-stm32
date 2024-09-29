@@ -35,7 +35,40 @@ endif()
 
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
+execute_process(
+    COMMAND ${PYTHON_EXECUTABLE}
+    ${SDK_BASE}/scripts/config.py
+    -s ${SDK_BASE}
+    -c ${CMAKE_CURRENT_SOURCE_DIR}/proj.conf
+    -d ${CMAKE_BINARY_DIR}
+    -m
+    -a ${CMAKE_CURRENT_SOURCE_DIR}
+    RESULT_VARIABLE ret_config
+)
+
+# script reads .config file from the build directory and prints all defined
+# symbols to stdout
+execute_process(
+    COMMAND ${PYTHON_EXECUTABLE}
+    ${SDK_BASE}/scripts/read_config.py
+    -d ${CMAKE_BINARY_DIR}
+    OUTPUT_VARIABLE CONFIG   
+)
+
+# convert stdout string from the script into a list 
+foreach(item ${CONFIG})
+    # load kconfig symbols as cmake variables
+    cmake_language(EVAL CODE "set (${item})")
+endforeach()
+
+if(${ret_config} EQUAL "1")
+    message(FATAL_ERROR ret_config)
+    return()
+endif()
+
 add_executable(${PROJECT_NAME})
+
+include(${SDK_BASE}/src/CMakeLists.txt)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${SDK_BASE}/modules/CMSIS_5/CMSIS/Core/Include
