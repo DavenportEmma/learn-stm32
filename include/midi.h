@@ -3,8 +3,6 @@
 
 #include "stm32f722xx.h"
 
-#define MAX_SEQUENCE_LENGTH 64
-
 typedef enum {
     NOTE_OFF    = 0x80,
     NOTE_ON     = 0x90,
